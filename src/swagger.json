@@ -1,0 +1,146 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+      "title": "API",
+      "version": "1.0.0",
+      "termsOfService": "http://localhost:3000/terms/",
+      "description": "Esta é uma API de exemplo com operações CRUD e autenticação."
+  },
+  "servers": [
+      {
+          "url": "http://localhost:3000/",
+          "description": "Servidor Local"
+      },
+      {
+        "url": "https://userauth23-fbe378948f7c.herokuapp.com",
+        "description": "Production server"
+      }
+  ],
+  "paths": {
+      "/login": {
+        "post": {
+            "summary": "Logar na aplicação",
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {"$ref": "#/components/schemas/User_Required"}
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {"$ref": "#/components/schemas/Login_Success"}
+                            }
+                        }
+                    }
+                }
+            }
+        
+          }
+      },
+      "/user/create": {
+        "post": {
+            "summary": "Criar um novo usuário",
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {"$ref": "#/components/schemas/User_Required"}
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {"$ref": "#/components/schemas/User_Auth"}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+      },
+      "/user/update/password": {
+        "put": {
+            "summary": "Atualizar senha do usuário",
+            "security": [
+                {
+                    "BearerAuth": []
+                }
+            ],
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {"$ref": "#/components/schemas/User_Required_New_Password"}
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {"$ref": "#/components/schemas/User_Auth"}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+      }
+  },
+  "components": {
+      "schemas": {
+          "User_Required":{
+            "type": "object",
+            "properties": {
+               "username": {"type": "string", "description": "Nome do usuário"},
+               "password": {"type": "string", "description": "Senha do usuário"}
+            },
+            "required": ["username", "password"]
+          },
+          "User_Required_New_Password":{
+            "type": "object",
+            "properties": {
+               "username": {"type": "string", "description": "Nome do usuário"},
+               "new_password": {"type": "string", "description": "Nova senha do usuário"}
+            },
+            "required": ["username", "password"]
+          },
+          "User_Auth": {
+            "type": "object",
+            "properties": {
+               "username": {"type": "string", "description": "Nome do usuário"},
+               "password": {"type": "string", "description": "Senha do usuário"},
+               "created_at": {"type": "string", "description": "Data de criação do usuário"},
+                "updated_at": {"type": "string", "description": "Data de atualização do usuário"},
+                "is_active": {"type": "boolean", "description": "Status do usuário"}
+
+            },
+            "required": ["username", "password"]
+        },
+        "Login_Success":{
+            "type": "object",
+            "properties": {
+               "message": {"type": "string", "description": "Mensagem de sucesso"},
+               "token": {"type": "string", "description": "Token de autenticação"}
+            } 
+        }
+
+      },
+      "securitySchemes": {
+          "BearerAuth": {
+              "type": "http",
+              "scheme": "bearer",
+              "bearerFormat": "JWT"
+          }
+      }
+  }
+}
