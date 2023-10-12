@@ -9,14 +9,15 @@ const app = appInstance.exportApp();
 
 const request = supertest(app);
 let timeout = (process.env.TEST_TIMEOUT || 10000) as number;
+let numberAccount = 987654321;
 describe('Bank Account action', () => {
     beforeEach(() => {
         jest.clearAllMocks();
-     });
-   
+    });
+
     it('Create a bank account', async () => {
         const response = await request.post('/bank-account/create').send({
-            number_account: 123456789,
+            number_account: numberAccount,
             type: 'corrente',
             balance: 1000
         });
@@ -25,11 +26,11 @@ describe('Bank Account action', () => {
         expect(response.body).toHaveProperty('number_account');
         expect(response.body).toHaveProperty('type');
         expect(response.body).toHaveProperty('balance');
-        
+
     }, timeout);
 
     it('Get a bank account by number', async () => {
-        const response = await request.get('/bank-account/unique/123456789');
+        const response = await request.get(`/bank-account/unique/${numberAccount}`);
 
         expect(response.status).toBe(200);
         expect(response.body.length).toBe(1);
@@ -37,11 +38,11 @@ describe('Bank Account action', () => {
         expect(response.body[0]).toHaveProperty('number_account');
         expect(response.body[0]).toHaveProperty('type');
         expect(response.body[0]).toHaveProperty('balance');
-        
+
     }, timeout);
 
     it('Update a bank account', async () => {
-        const response = await request.put('/bank-account/update/123456789').send({
+        const response = await request.put(`/bank-account/update/${numberAccount}`).send({
             type: 'poupanca',
             balance: 2000
         });
@@ -54,7 +55,7 @@ describe('Bank Account action', () => {
         expect(response.body[0]).toHaveProperty('balance');
         expect(response.body[0].type).toBe('poupanca');
         expect(parseFloat(response.body[0].balance)).toBe(2000);
-        
+
     });
 
     it('Get all bank accounts', async () => {
@@ -64,15 +65,15 @@ describe('Bank Account action', () => {
     }, timeout);
 
     it('Delete a bank account', async () => {
-        const response = await request.delete('/bank-account/delete/123456789');
+        const response = await request.delete(`/bank-account/delete/${numberAccount}`);
 
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('message');
         expect(response.body.message).toBe('Bank account deleted');
     }
-    , timeout);
+        , timeout);
 });
-    
+
 
 
 

@@ -9,19 +9,10 @@ module.exports = {
         autoIncrement: true,
       },
       number_account_origin: {
-        type: Sequelize.STRING(20),
-        allowNull: false,
-        references: {
-          model: 'bank_account', // Tabela de referência
-          key: 'number_account', // Campo de referência
-        },
+        type: Sequelize.STRING(20)
       },
       number_account_destiny: {
-        type: Sequelize.STRING(20),
-        references: {
-          model: 'bank_account', // Tabela de referência
-          key: 'number_account', // Campo de referência
-        },
+        type: Sequelize.STRING(20)
       },
       value: {
         type: Sequelize.DECIMAL(10, 2),
