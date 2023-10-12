@@ -4,6 +4,7 @@ import BankAccount from "../entities/BankAccount";
 import { LoggerUtil } from "../utils/logger.util";
 import { BankAccountDto } from "../dtos/bank_account.dto";
 import { ResponseUtil } from "../utils/response.util";
+import { error } from "winston";
 
 export class BankAccountService {
     globalRepository = new GlobalRepository(BankAccount);
@@ -29,8 +30,7 @@ export class BankAccountService {
                     number_account: body.number_account,
                     type: body.type,
                     balance: body.balance,
-                    created_at: new Date(),
-                    updated_at: new Date()
+                    created_at: new Date()
                 } as BankAccountDto;
     
                 let newBankAccount = await this.globalRepository.createData(data);
@@ -74,5 +74,39 @@ export class BankAccountService {
         };
 
         ResponseUtil.showErrorsOrExecuteFunction([], response, callback);
+    }
+
+    async updateBankAccount(request: Request, response: Response) {
+        try {
+            const body = request.body;
+            const { number_account } = request.params;
+            LoggerUtil.logInfo(`Starting updateBankAccount: ${JSON.stringify(body)}`, 'service/bank_account.service.ts');
+            let errors: Array<string> = [];
+
+            if(body.number_account){
+                errors.push('Number account cannot be changed');
+            }
+
+            let callback = async () => {
+
+
+                let data = {} as BankAccountDto;
+                if (body.type) {
+                    data.type = body.type;
+                }
+                if (body.balance) {
+                    data.balance = body.balance;
+                }
+                
+                let updateBankAccount = await this.globalRepository.updateData(data, { number_account: number_account });
+                LoggerUtil.logInfo(`Finishing updateBankAccount: ${JSON.stringify(updateBankAccount)}`, 'service/bank_account.service.ts');
+                response.status(200).json(updateBankAccount);
+            };
+
+            ResponseUtil.showErrorsOrExecuteFunction(errors, response, callback);
+        } catch (error: any) {
+            LoggerUtil.logError(`Error: ${error.message}`, 'service/bank_account.service.ts', 'updateBankAccount');
+            response.status(500).json({ error: error.message });
+        }
     }
 }

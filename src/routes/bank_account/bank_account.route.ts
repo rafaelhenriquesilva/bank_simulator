@@ -8,9 +8,10 @@ const bankAccount = Router();
 export class BankAccountRoute {
   public async init() {
     LoggerUtil.logInfo('Starting BankAccountRoute', 'routes/health/health.route.ts');
-    bankAccount.post('/create', BankAccountValidator.createUserAndLoginValidator(), this.createBankAccount);
+    bankAccount.post('/create', BankAccountValidator.createBankAccountValidator(), this.createBankAccount);
     bankAccount.get('/unique/:number_account', this.getBankAccopuntByNumber);
     bankAccount.get('/all', this.getAllBankAccounts);
+    bankAccount.put('/update/:number_account', BankAccountValidator.updateUserValidator(), this.updateBankAccount);
   }
 
   public async createBankAccount(request: Request, response: Response) {
@@ -29,6 +30,12 @@ export class BankAccountRoute {
     LoggerUtil.logInfo('Starting getAllBankAccounts', 'routes/health/health.route.ts');
     const bankAccountService = new BankAccountService();
     bankAccountService.getAllBankAccounts(request, response);
+  }
+
+  public updateBankAccount(request: Request, response: Response) {
+    LoggerUtil.logInfo('Starting updateBankAccount', 'routes/health/health.route.ts');
+    const bankAccountService = new BankAccountService();
+    bankAccountService.updateBankAccount(request, response);
   }
 
   getRoute() {
