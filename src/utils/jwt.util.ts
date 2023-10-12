@@ -33,6 +33,7 @@ export class JwtUtil {
             message: 'Invalid token',
           });
         } else {
+          // TODO: verificar se o token é o token salvo no banco de dados
           resolve(true);
         }
       });

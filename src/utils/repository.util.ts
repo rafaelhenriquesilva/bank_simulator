@@ -82,6 +82,20 @@ export class RepositoryUtil<T extends Model> {
         }
     }
 
+    async createRecords(records: any[], isReplica?: boolean) {
+        try {
+          const connection = await this.getConnection(isReplica);
+          const model = connection.models[this.model.name];
+      
+          const createdRecords = await model.bulkCreate(records);
+          return createdRecords;
+        } catch (error: any) {
+          LoggerUtil.logError(`Error to create records: ${error.message}`, 'utils/repository.util.ts', 'createRecords');
+          throw new Error(`Error to create records: ${error.message}`);
+        }
+      }
+      
+
     async deleteRecord(id: any,  isReplica?: boolean) {
         try {
             const connection = await this.getConnection(isReplica);
@@ -98,4 +112,6 @@ export class RepositoryUtil<T extends Model> {
             throw new Error(`Error to delete record: ${error.message}`);
         }
     }
+
+    
 }
