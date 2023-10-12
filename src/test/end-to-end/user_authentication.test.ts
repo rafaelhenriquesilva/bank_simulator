@@ -99,7 +99,7 @@ describe('User And Login Routes', () => {
     expect(response.body[0].username).toBe(userCredentials.username);
     expect(response.body[0].password).not.toBe(userCredentials.password);
     expect(comparePassword).toBe(true);
-  });
+  }, timeout);
 
  
 });

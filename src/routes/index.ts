@@ -6,6 +6,7 @@ import { LoginRoute } from './login/login.route';
 import { RouterConfigDto } from '../dtos/router_config.dto';
 import { UserRoute } from './user/user.route';
 import { LoggerUtil } from '../utils/logger.util';
+import { BankAccountRoute } from './bank_account/bank_account.route';
 
 LoggerUtil.logInfo('Iniciando as rotas', 'routes/index.ts');
 
@@ -26,4 +27,5 @@ routes.get('/json-to-export', (req, res) => {
 new RouterConfigDto(new HealthRoute(), 'init', '/health', routes);
 new RouterConfigDto(new LoginRoute(), 'init', '/login', routes);
 new RouterConfigDto(new UserRoute(), 'init', '/user', routes);
+new RouterConfigDto(new BankAccountRoute(), 'init', '/bank-account', routes);
 

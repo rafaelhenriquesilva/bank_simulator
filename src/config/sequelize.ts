@@ -18,8 +18,9 @@ let databaseConfig: DatabaseConfig = new Object() as DatabaseConfig;
 
 LoggerUtil.logInfo(`Iniciando o banco de dados no ambiente: ${process.env.NODE_ENV}`, 'config/sequelize.ts');
 
-let dialect = process.env.DB_DIALECT as 'mysql' | 'sqlite' | 'postgres' | 'mssql' || 'sqlite';
+let dialect = process.env.DB_DIALECT as 'mysql' | 'sqlite' | 'postgres' | 'mssql' || 'mysql';
 
+console.log(` environment: ${process.env.NODE_ENV}`);
 if(process.env.NODE_ENV === 'production') {
   databaseConfig = {
     username: process.env.DB_USERNAME || 'seu_username',
@@ -27,6 +28,7 @@ if(process.env.NODE_ENV === 'production') {
     database: process.env.DB_DATABASE || 'sua_base_de_dados',
     host: process.env.DB_HOST || 'localhost',
     dialect: dialect, 
+    storage: './__base__/database.sqlite',
     define: {
       timestamps: true,
       createdAt: 'created_at',
@@ -50,6 +52,7 @@ if(process.env.NODE_ENV === 'production') {
     logging: false
   };
 }
+
 const sequelize = new Sequelize(databaseConfig as DatabaseConfig);
 
 // Teste a conexão

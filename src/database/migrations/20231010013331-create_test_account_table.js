@@ -31,5 +31,3 @@ module.exports = {
     await queryInterface.dropTable('test_account');
   },
 };
-
-// "posttest": "NODE_ENV=test sequelize db:migrate:undo:all"

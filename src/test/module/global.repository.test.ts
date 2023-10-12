@@ -2,6 +2,7 @@ import { QueryTypes } from "sequelize";
 import TestAccount from "../../entities/TestAccount";
 import { GlobalRepository } from "../../repositories/global.repository";
 import { parse } from "dotenv";
+import BankAccount from "../../entities/BankAccount";
 
 let globalRepositoryWithTestAccountModel = new GlobalRepository(TestAccount);
 let timeout = (process.env.TEST_TIMEOUT || 10000) as number;
@@ -25,6 +26,15 @@ describe('GlobalRepository methods', () => {
         
         expect(results).not.toBeNull(); 
     }, timeout);
+
+    it('get bank account', async () => {
+        let globalRepository = new GlobalRepository(BankAccount);
+        
+        let results = await globalRepository.getDataByParameters({});
+
+        
+        expect(results).not.toBeNull(); 
+    })
 
     it('call database and create data', async () => {
         let results = await globalRepositoryWithTestAccountModel.createData(data);

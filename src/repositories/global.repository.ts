@@ -26,7 +26,7 @@ export class GlobalRepository<T extends Model> {
         return ErrorUtil.handleErrorsIfContains(this.repositoryUtil.updateRecord(data, whereCondition, isReplica)) as Promise<T>;
     }
 
-    async createData(data: Partial<T>, isReplica?: boolean ): Promise<T> {
+    async createData(data: any, isReplica?: boolean ): Promise<T> {
         LoggerUtil.logInfo(`Starting createData, data: ${
             JSON.stringify(data)
         }`, 'repositories/global.repository.ts');

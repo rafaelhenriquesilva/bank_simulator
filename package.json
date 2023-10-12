@@ -4,10 +4,11 @@
   "description": "",
   "main": "dist/server.js",
   "scripts": {
-    "start": "npx tsc && node dist/server.js",
+    "start": "NODE_ENV=production npx tsc && node dist/server.js",
     "dev": "NODE_ENV=development ts-node-dev --respawn --transpile-only --ignore-watch node_modules src/server.ts",
     "pretest": "NODE_ENV=test sequelize db:migrate",
-    "test": "jest --coverage --all --verbose"
+    "test": "jest --coverage --all --verbose",
+    "posttest": "NODE_ENV=test sequelize db:migrate:undo:all"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.3",
