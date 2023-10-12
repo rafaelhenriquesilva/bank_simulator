@@ -15,13 +15,6 @@ describe('Bank Account action', () => {
      });
    
     it('Create a bank account', async () => {
-        let globalRepository = new GlobalRepository(BankAccount);
-        let searchBankAccountByNumber = await globalRepository.getDataByParameters({number_account: 123456789}) as BankAccount[]; 
-
-        if(searchBankAccountByNumber.length > 0){
-            await globalRepository.deleteData(searchBankAccountByNumber[0].id);
-        }
-
         const response = await request.post('/bank-account/create').send({
             number_account: 123456789,
             type: 'corrente',
@@ -69,6 +62,15 @@ describe('Bank Account action', () => {
 
         expect(response.status).toBe(200);
     }, timeout);
+
+    it('Delete a bank account', async () => {
+        const response = await request.delete('/bank-account/delete/123456789');
+
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('message');
+        expect(response.body.message).toBe('Bank account deleted');
+    }
+    , timeout);
 });
     
 

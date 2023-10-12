@@ -12,6 +12,7 @@ export class BankAccountRoute {
     bankAccount.get('/unique/:number_account', this.getBankAccopuntByNumber);
     bankAccount.get('/all', this.getAllBankAccounts);
     bankAccount.put('/update/:number_account', BankAccountValidator.updateUserValidator(), this.updateBankAccount);
+    bankAccount.delete('/delete/:number_account', this.deleteBankAccount);
   }
 
   public async createBankAccount(request: Request, response: Response) {
@@ -36,6 +37,12 @@ export class BankAccountRoute {
     LoggerUtil.logInfo('Starting updateBankAccount', 'routes/health/health.route.ts');
     const bankAccountService = new BankAccountService();
     bankAccountService.updateBankAccount(request, response);
+  }
+
+  public deleteBankAccount(request: Request, response: Response) {
+    LoggerUtil.logInfo('Starting deleteBankAccount', 'routes/health/health.route.ts');
+    const bankAccountService = new BankAccountService();
+    bankAccountService.deleteBankAccount(request, response);
   }
 
   getRoute() {

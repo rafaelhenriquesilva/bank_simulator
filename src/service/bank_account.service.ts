@@ -109,4 +109,25 @@ export class BankAccountService {
             response.status(500).json({ error: error.message });
         }
     }
+
+    async deleteBankAccount(request: Request, response: Response) {
+        const { number_account } = request.params;
+
+        LoggerUtil.logInfo(`Starting deleteBankAccount: ${number_account}`, 'service/bank_account.service.ts');
+
+        let callback = async () => {
+            let bankAccount = await this.globalRepository.getDataByParameters({ number_account: number_account }) as BankAccount[];
+
+            if (bankAccount.length > 0) {
+                await this.globalRepository.deleteData(bankAccount[0].id);
+                LoggerUtil.logInfo(`Finishing deleteBankAccount: ${number_account}`, 'service/bank_account.service.ts');
+                response.status(200).json({ message: 'Bank account deleted' });
+            } else {
+                LoggerUtil.logError(`Bank account not found: ${number_account}` , 'service/bank_account.service.ts', 'deleteBankAccount');
+                response.status(404).json({ error: 'Bank account not found' });
+            }
+        };
+
+        ResponseUtil.showErrorsOrExecuteFunction([], response, callback);
+    }
 }
