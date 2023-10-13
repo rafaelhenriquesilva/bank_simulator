@@ -2,17 +2,18 @@ import { Request, Response, Router } from 'express';
 import { LoggerUtil } from '../../utils/logger.util';
 import { BankAccountService } from '../../service/bank_account.service';
 import { BankAccountValidator } from '../../validators/bank_account.validator';
+import { verifyTokenMiddleware } from '../../middlewares/auth.middleware';
 
 const bankAccount = Router();
 
 export class BankAccountRoute {
   public async init() {
     LoggerUtil.logInfo('Starting BankAccountRoute', 'routes/health/health.route.ts');
-    bankAccount.post('/create', BankAccountValidator.createBankAccountValidator(), this.createBankAccount);
-    bankAccount.get('/unique/:number_account', this.getBankAccopuntByNumber);
-    bankAccount.get('/all', this.getAllBankAccounts);
-    bankAccount.put('/update/:number_account', BankAccountValidator.updateUserValidator(), this.updateBankAccount);
-    bankAccount.delete('/delete/:number_account', this.deleteBankAccount);
+    bankAccount.post('/create',verifyTokenMiddleware, BankAccountValidator.createBankAccountValidator(), this.createBankAccount);
+    bankAccount.get('/unique/:number_account', verifyTokenMiddleware, BankAccountValidator.bankAccountByNumberParamsValidator(), this.getBankAccopuntByNumber);
+    bankAccount.get('/all', verifyTokenMiddleware, this.getAllBankAccounts);
+    bankAccount.put('/update/:number_account', verifyTokenMiddleware, BankAccountValidator.updateUserValidator(), this.updateBankAccount);
+    bankAccount.delete('/delete/:number_account', verifyTokenMiddleware, BankAccountValidator.bankAccountByNumberParamsValidator(), this.deleteBankAccount);
   }
 
   public async createBankAccount(request: Request, response: Response) {

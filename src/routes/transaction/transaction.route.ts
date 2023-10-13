@@ -2,16 +2,17 @@ import { Request, Response, Router } from 'express';
 import { LoggerUtil } from '../../utils/logger.util';
 import { TransactionService } from '../../service/transaction.service';
 import { TransactionValidator } from '../../validators/transaction.validator';
+import { verifyTokenMiddleware } from '../../middlewares/auth.middleware';
 
 const transactionRoute = Router();
 
 export class TransactionRoute {
     init(){
         LoggerUtil.logInfo('Starting TransactionRoute', 'routes/transaction/transaction.route.ts');
-        transactionRoute.post('/withdraw', TransactionValidator.createTransactionValidator(), this.withdraw);
-        transactionRoute.post('/deposit', TransactionValidator.createTransactionValidator(), this.deposit);
-        transactionRoute.get('/all', this.getAll);
-        transactionRoute.post('/transfer', TransactionValidator.createTransferValidator(), this.transfer);
+        transactionRoute.post('/withdraw', verifyTokenMiddleware, TransactionValidator.createTransactionValidator(), this.withdraw);
+        transactionRoute.post('/deposit', verifyTokenMiddleware, TransactionValidator.createTransactionValidator(), this.deposit);
+        transactionRoute.get('/all', verifyTokenMiddleware, this.getAll);
+        transactionRoute.post('/transfer', verifyTokenMiddleware, TransactionValidator.createTransferValidator(), this.transfer);
     }
 
     public async withdraw(req: Request, res: Response) {

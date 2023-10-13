@@ -38,5 +38,17 @@ export class BankAccountValidator {
         ]);
     }
 
+    static bankAccountByNumberParamsValidator() {
+        let numberAccountNotEmpty = param('number_account').notEmpty().withMessage('Number account cannot be empty');
+        let numberAccountMin8 = param('number_account').isLength({ min: 7 }).withMessage('Number account must have minimum length of 7 characters');
+        let numberAccountMax20 = param('number_account').isLength({ max: 20 }).withMessage('Number account must have maximum length of 20 characters');
+
+        return ValidatorUtil.validateFields([
+            numberAccountNotEmpty, 
+            numberAccountMin8, 
+            numberAccountMax20
+        ]);
+    }
+
     
 }

@@ -22,17 +22,12 @@ let token = '';
 describe('User And Login Routes', () => {
 
   beforeEach(() => {
-     jest.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   it('Create user', async () => {
-    
-    let userAlreadyExist = await globalRepository
-          .getDataByParameters({username: userCredentials.username}) as UserAuthentication[];
 
-    if(userAlreadyExist.length > 0) {
-      await globalRepository.deleteData(userAlreadyExist[0].id);
-    }
+    await globalRepository.deleteAllData();
 
     const user = await request.post('/user/create')
       .send({
@@ -41,9 +36,9 @@ describe('User And Login Routes', () => {
       })
       .set('Content-Type', 'application/json'); // Set the content-type header
 
-      expect(user.body).not.toBeNull();
-      expect(user.body.username).toBe(userCredentials.username);
-      expect(user.body.password).not.toBe(userCredentials.password);
+    expect(user.body).not.toBeNull();
+    expect(user.body.username).toBe(userCredentials.username);
+    expect(user.body.password).not.toBe(userCredentials.password);
   }, timeout);
 
   it('Login user', async () => {
@@ -64,23 +59,23 @@ describe('User And Login Routes', () => {
   }, timeout);
 
   it('Login user with invalid password', async () => {
-    const invalidUser = await loginUser(request, userCredentials.username ,'invalid_password');
+    const invalidUser = await loginUser(request, userCredentials.username, 'invalid_password');
 
     expect(invalidUser.body).not.toBeNull();
     expect(invalidUser.body.errors).not.toBeNull();
     expect(invalidUser.body.errors[0]).toBe('Password not match');
 
   }, timeout);
-  
+
   it('Login user: username and password with four characters', async () => {
-    const invalidUser = await loginUser(request, 'user' ,'pass');
+    const invalidUser = await loginUser(request, 'user', 'pass');
 
     expect(invalidUser.body).not.toBeNull();
     expect(invalidUser.body.errors).not.toBeNull();
     expect(invalidUser.body.errors[0].msg).toBe('Username must have minimum length of 8 characters');
     expect(invalidUser.body.errors[1].msg).toBe('Password must have minimum length of 8 characters');
 
-  } , timeout);
+  }, timeout);
 
   it('update user password', async () => {
     let newPassword = 'new_password';
@@ -90,10 +85,10 @@ describe('User And Login Routes', () => {
         "username": userCredentials.username,
         "new_password": newPassword
       })
-      .set('Content-Type', 'application/json') // Set the content-type header
-      .set('Authorization', `Bearer ${token}`); // Set the content-type header
+      .set('Content-Type', 'application/json')
+      .set('Authorization', `Bearer ${token}`);
 
-    let comparePassword = await PasswordUtil.comparePassword(newPassword, response.body[0].password);  
+    let comparePassword = await PasswordUtil.comparePassword(newPassword, response.body[0].password);
 
     expect(response.body).not.toBeNull();
     expect(response.body[0].username).toBe(userCredentials.username);
@@ -101,7 +96,7 @@ describe('User And Login Routes', () => {
     expect(comparePassword).toBe(true);
   }, timeout);
 
- 
+
 });
 
 

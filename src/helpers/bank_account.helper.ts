@@ -46,11 +46,11 @@ export default class BankAccountHelper {
             let balanceToFloat = parseFloat(bankAccount.balance as any);
             let valueToFloat = parseFloat(value as any);
 
-            let newBalance = 0;
+            let newBalance = balanceToFloat;
             if (operationType == 'deposit') {
-                newBalance = balanceToFloat + valueToFloat;
+                newBalance += valueToFloat;
             } else if (operationType == 'withdraw') {
-                newBalance = balanceToFloat - valueToFloat;
+                newBalance -= valueToFloat;
             }
 
 
