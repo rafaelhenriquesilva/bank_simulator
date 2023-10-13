@@ -5,6 +5,8 @@ import { Request, Response } from 'express';
 import { LoggerUtil } from "../utils/logger.util";
 import TransactionHelper from "../helpers/transaction.helper";
 import { ResponseUtil } from "../utils/response.util";
+import BankAccountHelper from "../helpers/bank_account.helper";
+
 
 export class TransactionService {
 
@@ -32,11 +34,11 @@ export class TransactionService {
             let bankAccount: BankAccount[] = [];
             let errors = new Array<string>();
            
-            bankAccount = await TransactionHelper.searchBankAccountByNumberAccount(number_account_origin, errors);
+            bankAccount = await BankAccountHelper.searchBankAccountByNumberAccount(number_account_origin, errors);
             await TransactionHelper.verifyBalance(bankAccount, value, errors);
             
             let callback = async () => {
-                let newBalance = await TransactionHelper.updateBalance(bankAccount, value, number_account_origin, 'withdraw');
+                let newBalance = await BankAccountHelper.updateBalance(bankAccount, value, number_account_origin, 'withdraw');
                 let transactionData = await TransactionHelper.createDataTransaction(number_account_origin, 'saque', value);
                 let newTransaction = await TransactionHelper.insertTransaction(transactionData);
                 LoggerUtil.logInfo(`Withdraw completed: number_account_origin=${number_account_origin} / value=${value}`, 'service/transaction.service.ts');
@@ -63,9 +65,9 @@ export class TransactionService {
             let bankAccount: BankAccount[] = [];
             let errors = new Array<string>();
            
-            bankAccount = await TransactionHelper.searchBankAccountByNumberAccount(number_account_origin, errors);
+            bankAccount = await BankAccountHelper.searchBankAccountByNumberAccount(number_account_origin, errors);
            
-            let newBalance = await TransactionHelper.updateBalance(bankAccount, value, number_account_origin, 'deposit');
+            let newBalance = await BankAccountHelper.updateBalance(bankAccount, value, number_account_origin, 'deposit');
             
             let callback = async () => {
                 let transactionData = await TransactionHelper.createDataTransaction(number_account_origin, 'deposito', value);
