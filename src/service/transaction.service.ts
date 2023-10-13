@@ -71,9 +71,7 @@ export class TransactionService {
             
             let callback = async () => {
                 let transactionData = await TransactionHelper.createDataTransaction(number_account_origin, 'deposito', value);
-    
-                let globalRepositoryTransaction = new GlobalRepository(Transaction);
-                let newTransaction = await globalRepositoryTransaction.createData(transactionData) as Transaction;
+                let newTransaction = await TransactionHelper.insertTransaction(transactionData);
                 LoggerUtil.logInfo(`Deposit completed: number_account_origin=${number_account_origin} / value=${value}`, 'service/transaction.service.ts');
                 response.status(201).json({
                     message: 'Depósito realizado com sucesso',
@@ -103,9 +101,7 @@ export class TransactionService {
                 let newBalanceDestination = await BankAccountHelper.updateBalance(bankAccounts[1], value, number_account_destination, 'deposit');
 
                 let transactionData = await TransactionHelper.createDataTransaction(number_account_origin, 'transferencia', value, number_account_destination);
-
-                let globalRepositoryTransaction = new GlobalRepository(Transaction);
-                let newTransaction = await globalRepositoryTransaction.createData(transactionData) as Transaction;
+                let newTransaction = await TransactionHelper.insertTransaction(transactionData);
                 LoggerUtil.logInfo(`Transfer completed: number_account_origin=${number_account_origin} / number_account_destination=${number_account_destination} / value=${value}`, 'service/transaction.service.ts');
                 response.status(201).json({
                     message: 'Transferência realizada com sucesso',

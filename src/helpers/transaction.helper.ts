@@ -30,11 +30,11 @@ export default class TransactionHelper {
         return data;
     }
 
-    static async insertTransaction(data: Transaction) {
+    static async insertTransaction(transactionData: Transaction) {
         try {
-            LoggerUtil.logInfo(`Starting createDataTransaction: data=${data}`, 'helper/transaction.helper.ts');
+            LoggerUtil.logInfo(`Starting createDataTransaction: data=${transactionData}`, 'helper/transaction.helper.ts');
             let globalRepositoryTransaction = new GlobalRepository(Transaction);
-            let newTransaction = await globalRepositoryTransaction.createData(data);
+            let newTransaction = await globalRepositoryTransaction.createData(transactionData) as Transaction;
             return newTransaction;
         } catch (error) {
             LoggerUtil.logError(`Error in createDataTransaction: ${error}`, 'service/transaction.service.ts', 'createDataTransaction');
