@@ -47,13 +47,13 @@ export class UserAuthenticationHelper {
         }
     }
 
-    static async updateData(model: any, whereCondition: any, data: any){
+    static async updateData(model: any, whereCondition: UserAuthentication, data: UserAuthentication){
         let globalRepository = new GlobalRepository(model);
         let dataUpdated = await globalRepository.updateData(data, whereCondition);
         return dataUpdated;
     }
 
-    static createUserData(body: any, encryptPassword: string){
+    static createUserData(body: UserAuthentication, encryptPassword: string){
         let data = {
             username: body.username,
             password: encryptPassword,

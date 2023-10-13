@@ -14,5 +14,18 @@ export class TransactionValidator {
         ]);
     }
 
+    static createTransferValidator() {
+        let numberAccountOriginNotEmpty = body('number_account_origin').notEmpty().withMessage('Number account origin cannot be empty');
+        let numberAccountDestinationNotEmpty = body('number_account_destination').notEmpty().withMessage('Number account destination cannot be empty');
+        let value = body('value').notEmpty().withMessage('value cannot be empty');
+        let valueMoreThanZero = body('value').isFloat({ min: 0 }).withMessage('value must be more than zero');
+        return ValidatorUtil.validateFields([
+            numberAccountOriginNotEmpty,
+            numberAccountDestinationNotEmpty,
+            value, 
+            valueMoreThanZero
+        ]);
+    }
+
     
 }

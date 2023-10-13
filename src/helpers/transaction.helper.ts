@@ -1,5 +1,6 @@
-import { Transaction } from "sequelize";
+
 import BankAccount from "../entities/BankAccount";
+import Transaction from "../entities/Transaction";
 import { GlobalRepository } from "../repositories/global.repository";
 import { LoggerUtil } from "../utils/logger.util";
 
@@ -12,7 +13,7 @@ export default class TransactionHelper {
             errors.push('Insufficient balance');
         }
     }
-    
+
     static async createDataTransaction(number_account: string, type: string, value: number) {
         let data = {
             number_account_origin: number_account,
@@ -25,7 +26,7 @@ export default class TransactionHelper {
         return data;
     }
 
-    static async insertTransaction(data: any) {
+    static async insertTransaction(data: Transaction) {
         try {
             LoggerUtil.logInfo(`Starting createDataTransaction: data=${data}`, 'helper/transaction.helper.ts');
             let globalRepositoryTransaction = new GlobalRepository(Transaction);

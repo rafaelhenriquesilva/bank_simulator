@@ -17,7 +17,7 @@ export class BankAccountService {
             LoggerUtil.logInfo(`Starting createBankAccount: ${JSON.stringify(body)}`, 'service/bank_account.service.ts');
             let errors: Array<string> = [];
 
-            await BankAccountHelper.veryfyBankAccountExists(body.number_account, errors);
+            await BankAccountHelper.verifyBankAccountExists(body.number_account, errors);
             let callback = async () => {
                 let data = await BankAccountHelper.createDataBankAccount(body.number_account, body.type, body.balance, 'create');
     
@@ -68,7 +68,7 @@ export class BankAccountService {
             let errors: Array<string> = [];
             await BankAccountHelper.searchBankAccountByNumberAccount(number_account, errors);
 
-            BankAccountHelper.veryfyBankAccountExists(number_account, errors);
+            BankAccountHelper.verifyBankAccountExists(number_account, errors);
 
             let callback = async () => {
                 let data = await BankAccountHelper.createDataBankAccount('', body.type, body.balance, 'update'); 

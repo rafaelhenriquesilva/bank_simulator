@@ -39,7 +39,7 @@ export class TransactionService {
             
             let callback = async () => {
                 let newBalance = await BankAccountHelper.updateBalance(bankAccount, value, number_account_origin, 'withdraw');
-                let transactionData = await TransactionHelper.createDataTransaction(number_account_origin, 'saque', value);
+                let transactionData = await TransactionHelper.createDataTransaction(number_account_origin, 'saque', value) as Transaction;
                 let newTransaction = await TransactionHelper.insertTransaction(transactionData);
                 LoggerUtil.logInfo(`Withdraw completed: number_account_origin=${number_account_origin} / value=${value}`, 'service/transaction.service.ts');
                 response.status(201).json({
@@ -90,5 +90,8 @@ export class TransactionService {
         }
     }
 
+    async transfer(request: Request, response: Response) {
+        
+    }
 
 }
