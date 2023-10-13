@@ -38,12 +38,12 @@ export default class BankAccountHelper {
         }
     }
 
-    static async updateBalance(bankAccount: BankAccount[], value: number, numberAccount: string, operationType: string) {
+    static async updateBalance(bankAccount: BankAccount, value: number, numberAccount: string, operationType: string) {
         try {
             LoggerUtil.logInfo(`Starting updateBalance: numberAccount=${numberAccount} / value=${value}`, 'helper/transaction.helper.ts');
 
             let globalRepository = new GlobalRepository(BankAccount);
-            let balanceToFloat = parseFloat(bankAccount[0].balance as any);
+            let balanceToFloat = parseFloat(bankAccount.balance as any);
             let valueToFloat = parseFloat(value as any);
 
             let newBalance = 0;

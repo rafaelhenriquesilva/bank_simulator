@@ -7,20 +7,24 @@ import { LoggerUtil } from "../utils/logger.util";
 
 export default class TransactionHelper {
 
-    static verifyBalance(bankAccount: BankAccount[], value: number, errors: Array<string>) {
-        if (bankAccount && bankAccount[0].balance < value) {
-            LoggerUtil.logError(`Insufficient balance: number_account_origin=${bankAccount[0].number_account} / value=${value}`, 'service/transaction.service.ts', 'withdraw');
-            errors.push('Insufficient balance');
+    static verifyBalance(bankAccount: BankAccount, value: number, errors: Array<string>) {
+        if (bankAccount && bankAccount.balance < value) {
+            LoggerUtil.logError(`Insufficient balance: number_account_origin=${bankAccount.number_account} / value=${value}`, 'service/transaction.service.ts', 'withdraw');
+            errors.push(`Insufficient balance: number_account=${bankAccount.number_account} / value=${value}`);
         }
     }
 
-    static async createDataTransaction(number_account: string, type: string, value: number) {
+    static async createDataTransaction(number_account_origin: string, type: string, value: number, number_account_destination?: string) {
         let data = {
-            number_account_origin: number_account,
+            number_account_origin: number_account_origin,
             type: type,
             value: value,
             created_at: new Date(),
             updated_at: new Date()
+        } as any;
+
+        if (number_account_destination) {
+            data['number_account_destiny'] = number_account_destination;
         }
         LoggerUtil.logInfo(`Starting createDataTransaction: data=${data}`, 'helper/transaction.helper.ts');
         return data;
