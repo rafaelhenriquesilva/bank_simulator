@@ -1,146 +1,520 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-      "title": "API",
-      "version": "1.0.0",
-      "termsOfService": "http://localhost:3000/terms/",
-      "description": "Esta é uma API de exemplo com operações CRUD e autenticação."
-  },
-  "servers": [
-      {
-          "url": "http://localhost:3000/",
-          "description": "Servidor Local"
-      },
-      {
-        "url": "https://userauth23-fbe378948f7c.herokuapp.com",
-        "description": "Production server"
-      }
-  ],
-  "paths": {
-      "/login": {
-        "post": {
-            "summary": "Logar na aplicação",
-            "requestBody": {
-                "content": {
-                    "application/json": {
-                        "schema": {"$ref": "#/components/schemas/User_Required"}
-                    }
-                }
-            },
-            "responses": {
-                "200": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "array",
-                                "items": {"$ref": "#/components/schemas/Login_Success"}
-                            }
-                        }
-                    }
-                }
-            }
-        
-          }
-      },
-      "/user/create": {
-        "post": {
-            "summary": "Criar um novo usuário",
-            "requestBody": {
-                "content": {
-                    "application/json": {
-                        "schema": {"$ref": "#/components/schemas/User_Required"}
-                    }
-                }
-            },
-            "responses": {
-                "200": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "array",
-                                "items": {"$ref": "#/components/schemas/User_Auth"}
-                            }
-                        }
-                    }
-                }
-            }
-        }
-      },
-      "/user/update/password": {
-        "put": {
-            "summary": "Atualizar senha do usuário",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "requestBody": {
-                "content": {
-                    "application/json": {
-                        "schema": {"$ref": "#/components/schemas/User_Required_New_Password"}
-                    }
-                }
-            },
-            "responses": {
-                "200": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "array",
-                                "items": {"$ref": "#/components/schemas/User_Auth"}
-                            }
-                        }
-                    }
-                }
-            }
-        }
-      }
-  },
-  "components": {
-      "schemas": {
-          "User_Required":{
-            "type": "object",
-            "properties": {
-               "username": {"type": "string", "description": "Nome do usuário"},
-               "password": {"type": "string", "description": "Senha do usuário"}
-            },
-            "required": ["username", "password"]
-          },
-          "User_Required_New_Password":{
-            "type": "object",
-            "properties": {
-               "username": {"type": "string", "description": "Nome do usuário"},
-               "new_password": {"type": "string", "description": "Nova senha do usuário"}
-            },
-            "required": ["username", "password"]
-          },
-          "User_Auth": {
-            "type": "object",
-            "properties": {
-               "username": {"type": "string", "description": "Nome do usuário"},
-               "password": {"type": "string", "description": "Senha do usuário"},
-               "created_at": {"type": "string", "description": "Data de criação do usuário"},
-                "updated_at": {"type": "string", "description": "Data de atualização do usuário"},
-                "is_active": {"type": "boolean", "description": "Status do usuário"}
-
-            },
-            "required": ["username", "password"]
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API",
+        "version": "1.0.0",
+        "termsOfService": "http://localhost:3001/terms/",
+        "description": "Esta é uma API de exemplo com operações CRUD e autenticação."
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3001/",
+            "description": "Servidor Local"
         },
-        "Login_Success":{
-            "type": "object",
-            "properties": {
-               "message": {"type": "string", "description": "Mensagem de sucesso"},
-               "token": {"type": "string", "description": "Token de autenticação"}
-            } 
+        {
+            "url": "https://userauth23-fbe378948f7c.herokuapp.com",
+            "description": "Production server"
         }
-
-      },
-      "securitySchemes": {
-          "BearerAuth": {
-              "type": "http",
-              "scheme": "bearer",
-              "bearerFormat": "JWT"
-          }
-      }
-  }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "summary": "Logar na aplicação",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User_Required"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Login_Success"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/create": {
+            "post": {
+                "summary": "Criar um novo usuário",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User_Required"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User_Auth"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/update/password": {
+            "put": {
+                "summary": "Atualizar senha do usuário",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User_Required_New_Password"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User_Auth"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/bank-account/all": {
+            "get": {
+                "summary": "Listar todas as contas bancárias",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Bank_Account"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/bank-account/unique/{number_account}": {
+            "get": {
+                "summary": "Listar uma conta bancária específica",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "number_account",
+                        "required": true,
+                        "description": "Número da conta bancária",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Bank_Account"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transaction/all": {
+            "get": {
+                "summary": "Listar todas as transações",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Transaction"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/bank-account/update/{number_account}": {
+            "put": {
+                "summary": "Atualizar saldo da conta bancária",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "number_account",
+                        "required": true,
+                        "description": "Número da conta bancária",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Bank_Account"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Bank_Account"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/bank-account/create": {
+            "post": {
+                "summary": "Criar uma nova conta bancária",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Bank_Account"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Bank_Account"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transaction/withdraw": {
+            "post": {
+                "summary": "Sacar da conta bancária",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/WithdrawAndDeposit"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transaction/deposit": {
+            "post": {
+                "summary": "Depositar na conta bancária",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/WithdrawAndDeposit"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transaction/transfer": {
+            "post": {
+                "summary": "Transferir entre contas bancárias",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Transfer"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User_Required": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": "Nome do usuário"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "Senha do usuário"
+                    }
+                },
+                "required": [
+                    "username",
+                    "password"
+                ]
+            },
+            "User_Required_New_Password": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": "Nome do usuário"
+                    },
+                    "new_password": {
+                        "type": "string",
+                        "description": "Nova senha do usuário"
+                    }
+                },
+                "required": [
+                    "username",
+                    "password"
+                ]
+            },
+            "User_Auth": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": "Nome do usuário"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "Senha do usuário"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "description": "Data de criação do usuário"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "description": "Data de atualização do usuário"
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "description": "Status do usuário"
+                    }
+                },
+                "required": [
+                    "username",
+                    "password"
+                ]
+            },
+            "Login_Success": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Mensagem de sucesso"
+                    },
+                    "token": {
+                        "type": "string",
+                        "description": "Token de autenticação"
+                    }
+                }
+            },
+            "Bank_Account": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Id da conta bancária"
+                    },
+                    "number_account": {
+                        "type": "string",
+                        "description": "Número da conta bancária"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Tipo da conta bancária"
+                    },
+                    "balance": {
+                        "type": "string",
+                        "description": "Saldo da conta bancária"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "description": "Data de criação da conta bancária"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "description": "Data de atualização da conta bancária"
+                    }
+                },
+                "required": [
+                    "number_account",
+                    "type",
+                    "balance"
+                ]
+            },
+            "Transaction": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Id da transação"
+                    },
+                    "number_account_origin": {
+                        "type": "string",
+                        "description": "Número da conta bancária de origem"
+                    },
+                    "number_account_destiny": {
+                        "type": "string",
+                        "description": "Número da conta bancária de destino"
+                    },
+                    "value": {
+                        "type": "string",
+                        "description": "Valor da transação"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Tipo da transação"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "description": "Data de criação da transação"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "description": "Data de atualização da transação"
+                    }
+                }
+            },
+            "WithdrawAndDeposit": {
+                "type": "object",
+                "properties": {
+                    "number_account": {
+                        "type": "string",
+                        "description": "Número da conta bancária"
+                    },
+                    "value": {
+                        "type": "string",
+                        "description": "Valor da transação"
+                    }
+                },
+                "required": [
+                    "number_account",
+                    "value"
+                ]
+            },
+            "Transfer": {
+                "type": "object",
+                "properties": {
+                    "number_account_origin": {
+                        "type": "string",
+                        "description": "Número da conta bancária de origem"
+                    },
+                    "number_account_destination": {
+                        "type": "string",
+                        "description": "Número da conta bancária de destino"
+                    },
+                    "value": {
+                        "type": "string",
+                        "description": "Valor da transação"
+                    }
+                },
+                "required": [
+                    "number_account_origin",
+                    "number_account_destination",
+                    "value"
+                ]
+            }
+        },
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
 }
