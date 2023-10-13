@@ -1,7 +1,6 @@
 import supertest from 'supertest';
 import { App } from '../../app';
 import { GlobalRepository } from '../../repositories/global.repository';
-import { QueryTypes } from 'sequelize';
 import Transaction from '../../entities/Transaction';
 
 const appInstance = new App();

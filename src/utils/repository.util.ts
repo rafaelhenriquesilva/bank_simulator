@@ -8,7 +8,7 @@ import { LoggerUtil } from './logger.util';
 export class RepositoryUtil<T extends Model> {
     model: any;
 
-    constructor(model?:any) {
+    constructor(model?: any) {
         this.model = model;
     }
 
@@ -39,7 +39,7 @@ export class RepositoryUtil<T extends Model> {
         }
     }
 
-    async getRecordsByParameters(whereCondition: any,  isReplica?: boolean) {
+    async getRecordsByParameters(whereCondition: any, isReplica?: boolean) {
         try {
             const connection = await this.getConnection(isReplica);
             const records = connection.models[this.model.name].findAll({ where: whereCondition });
@@ -50,64 +50,50 @@ export class RepositoryUtil<T extends Model> {
         }
     }
 
-    async updateRecord(record: any, whereCondition: any,  isReplica?: boolean) {
+    async updateRecord(record: any, whereCondition: any, isReplica?: boolean) {
         try {
             const connection = await this.getConnection(isReplica);
-            const updatedRecord = await connection.models[this.model.name].update(record, { 
+            const updatedRecord = await connection.models[this.model.name].update(record, {
                 where: whereCondition,
                 returning: true,
-              });
+            });
             if (updatedRecord[0] === 0) {
                 LoggerUtil.logError(`Record with id ${whereCondition.id} not found.`, 'utils/repository.util.ts', 'updateRecord');
                 throw new Error(`Record with id ${whereCondition.id} not found.`);
 
             }
             let result = await this.getRecordsByParameters(whereCondition, isReplica);
-           
+
             return result;
-          } catch (error: any) {
+        } catch (error: any) {
             LoggerUtil.logError(`Error to update record: ${error.message}`, 'utils/repository.util.ts', 'updateRecord');
             throw new Error(`Error to update record: ${error.message}`);
         }
     }
 
-    async createRecord(record: any,  isReplica?: boolean) {
+    async createRecord(record: any, isReplica?: boolean) {
         try {
             const connection = await this.getConnection(isReplica);
             const createdRecord = await connection.models[this.model.name].create(record);
             return createdRecord;
-          } catch (error: any) {
+        } catch (error: any) {
             LoggerUtil.logError(`Error to create record: ${error.message}`, 'utils/repository.util.ts', 'createRecord');
             throw new Error(`Error to create record: ${error.message}`);
         }
     }
 
-    async createRecords(records: any[], isReplica?: boolean) {
-        try {
-          const connection = await this.getConnection(isReplica);
-          const model = connection.models[this.model.name];
-      
-          const createdRecords = await model.bulkCreate(records);
-          return createdRecords;
-        } catch (error: any) {
-          LoggerUtil.logError(`Error to create records: ${error.message}`, 'utils/repository.util.ts', 'createRecords');
-          throw new Error(`Error to create records: ${error.message}`);
-        }
-      }
-      
-
-    async deleteRecord(id: any,  isReplica?: boolean) {
+    async deleteRecord(id: any, isReplica?: boolean) {
         try {
             const connection = await this.getConnection(isReplica);
-            const deletedRecord = await connection.models[this.model.name].destroy({ 
+            const deletedRecord = await connection.models[this.model.name].destroy({
                 where: { id },
-              });
+            });
             if (deletedRecord === 0) {
                 LoggerUtil.logError(`Record with id ${id} not found.`, 'utils/repository.util.ts', 'deleteRecord');
                 throw new Error(`Record with id ${id} not found.`);
             }
             return { message: `Record with id ${id} deleted.` };
-          } catch (error: any) {
+        } catch (error: any) {
             LoggerUtil.logError(`Error to delete record: ${error.message}`, 'utils/repository.util.ts', 'deleteRecord');
             throw new Error(`Error to delete record: ${error.message}`);
         }
@@ -116,16 +102,16 @@ export class RepositoryUtil<T extends Model> {
     async deleteAllRecords(isReplica?: boolean) {
         try {
             const connection = await this.getConnection(isReplica);
-            const deletedRecords = await connection.models[this.model.name].destroy({ 
+            const deletedRecords = await connection.models[this.model.name].destroy({
                 where: {},
                 truncate: false
-              });
+            });
             return { message: `All records deleted.` };
-          } catch (error: any) {
+        } catch (error: any) {
             LoggerUtil.logError(`Error to delete all records: ${error.message}`, 'utils/repository.util.ts', 'deleteAllRecords');
             throw new Error(`Error to delete all records: ${error.message}`);
         }
     }
 
-    
+
 }
