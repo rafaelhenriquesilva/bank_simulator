@@ -1,5 +1,8 @@
 import supertest from 'supertest';
 import { App } from '../../app';
+import { GlobalRepository } from '../../repositories/global.repository';
+import { QueryTypes } from 'sequelize';
+import Transaction from '../../entities/Transaction';
 
 const appInstance = new App();
 const app = appInstance.exportApp();
@@ -25,6 +28,11 @@ describe('Transactions', () => {
         expect(response.body).toHaveProperty('balance');
 
     }, timeout);
+
+    it('Delete all transactions', async () => {
+        const globalRepository = new GlobalRepository(Transaction);
+        await globalRepository.deleteAllData()
+    })
 
     it('Withdraw 500 of account', async () => {
         const withdraw = await request.post('/transaction/withdraw').send({
@@ -74,8 +82,8 @@ describe('Transactions', () => {
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('transactions');
         expect(response.body.transactions).toBeInstanceOf(Array);
-        expect(response.body.transactions.length).toEqual(2);
-    });
+        expect(response.body.transactions.length).toBe(2);
+    } , timeout);
 
     it('Delete a bank account', async () => {
         const response = await request.delete(`/bank-account/delete/${numberAccount}`);

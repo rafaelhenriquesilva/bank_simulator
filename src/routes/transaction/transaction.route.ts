@@ -1,13 +1,15 @@
 import { Request, Response, Router } from 'express';
 import { LoggerUtil } from '../../utils/logger.util';
 import { TransactionService } from '../../service/transaction.service';
+import { TransactionValidator } from '../../validators/transaction.validator';
+
 const transactionRoute = Router();
 
 export class TransactionRoute {
     init(){
         LoggerUtil.logInfo('Starting TransactionRoute', 'routes/transaction/transaction.route.ts');
-        transactionRoute.post('/withdraw', this.withdraw);
-        transactionRoute.post('/deposit', this.deposit);
+        transactionRoute.post('/withdraw', TransactionValidator.createTransactionValidator(), this.withdraw);
+        transactionRoute.post('/deposit', TransactionValidator.createTransactionValidator(), this.deposit);
         transactionRoute.get('/all', this.getAll);
     }
 

@@ -56,7 +56,7 @@ describe('Bank Account action', () => {
         expect(response.body[0].type).toBe('poupanca');
         expect(parseFloat(response.body[0].balance)).toBe(2000);
 
-    });
+    }, timeout);
 
     it('Get all bank accounts', async () => {
         const response = await request.get('/bank-account/all');
@@ -70,8 +70,7 @@ describe('Bank Account action', () => {
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('message');
         expect(response.body.message).toBe('Bank account deleted');
-    }
-        , timeout);
+    }, timeout);
 });
 
 

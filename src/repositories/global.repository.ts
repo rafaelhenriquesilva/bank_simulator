@@ -40,6 +40,11 @@ export class GlobalRepository<T extends Model> {
         return ErrorUtil.handleErrorsIfContains(this.repositoryUtil.deleteRecord(id, isReplica)) as Promise<{ message: string }>;
     }
 
+    async deleteAllData(isReplica?: boolean ): Promise<{ message: string }> {
+        LoggerUtil.logInfo(`Starting deleteAllData`, 'repositories/global.repository.ts');
+        return ErrorUtil.handleErrorsIfContains(this.repositoryUtil.deleteAllRecords(isReplica)) as Promise<{ message: string }>;
+    }
+
     async executeQuery(query: string, typeQuery: QueryTypes,isReplica?: boolean ): Promise<any> {
         LoggerUtil.logInfo(`Starting executeQuery, query: ${
             JSON.stringify(query)

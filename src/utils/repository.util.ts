@@ -113,5 +113,19 @@ export class RepositoryUtil<T extends Model> {
         }
     }
 
+    async deleteAllRecords(isReplica?: boolean) {
+        try {
+            const connection = await this.getConnection(isReplica);
+            const deletedRecords = await connection.models[this.model.name].destroy({ 
+                where: {},
+                truncate: false
+              });
+            return { message: `All records deleted.` };
+          } catch (error: any) {
+            LoggerUtil.logError(`Error to delete all records: ${error.message}`, 'utils/repository.util.ts', 'deleteAllRecords');
+            throw new Error(`Error to delete all records: ${error.message}`);
+        }
+    }
+
     
 }
