@@ -8,6 +8,7 @@ export class TransactionRoute {
         LoggerUtil.logInfo('Starting TransactionRoute', 'routes/transaction/transaction.route.ts');
         transactionRoute.post('/withdraw', this.withdraw);
         transactionRoute.post('/deposit', this.deposit);
+        transactionRoute.get('/all', this.getAll);
     }
 
     public async withdraw(req: Request, res: Response) {
@@ -20,6 +21,12 @@ export class TransactionRoute {
         LoggerUtil.logInfo('Starting deposit', 'routes/transaction/transaction.route.ts');
         const transactionService = new TransactionService();
         await transactionService.deposit(req, res);
+    }
+
+    public async getAll(req: Request, res: Response) {
+        LoggerUtil.logInfo('Starting getAll', 'routes/transaction/transaction.route.ts');
+        const transactionService = new TransactionService();
+        await transactionService.getAll(req, res);
     }
 
     getRoute() {

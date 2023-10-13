@@ -1,8 +1,5 @@
 import supertest from 'supertest';
 import { App } from '../../app';
-import BankAccount from '../../entities/BankAccount';
-import { GlobalRepository } from '../../repositories/global.repository';
-
 
 const appInstance = new App();
 const app = appInstance.exportApp();
@@ -44,6 +41,18 @@ describe('Transactions', () => {
 
     }, timeout);
 
+    it('Inssuficient balance', async () => {
+        const withdraw = await request.post('/transaction/withdraw').send({
+            number_account_origin: numberAccount,
+            value: 600
+        });
+
+        expect(withdraw.status).toBe(400);
+        expect(withdraw.body).toHaveProperty('errors');
+        expect(withdraw.body.errors[0]).toBe('Insufficient balance');
+
+    }, timeout);
+
     it('Deposit 500 of account', async () => {
         const deposit = await request.post('/transaction/deposit').send({
             number_account_origin: numberAccount,
@@ -57,6 +66,15 @@ describe('Transactions', () => {
         expect(lstBankAccount.body[0]).toHaveProperty('balance');
         expect(parseFloat(lstBankAccount.body[0].balance)).toBe(1000);
 
+    }, timeout);
+
+    it('Get all transactions', async () => {
+        const response = await request.get('/transaction/all');
+
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('transactions');
+        expect(response.body.transactions).toBeInstanceOf(Array);
+        expect(response.body.transactions.length).toEqual(2);
     });
 
     it('Delete a bank account', async () => {
