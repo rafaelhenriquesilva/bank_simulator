@@ -1,26 +1,34 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/sequelize'; // Importe a instância do Sequelize
 
-class TestAccount extends Model {
+class BankAccount extends Model {
   public id!: number;
-  public name!: string;
-  public age!: number;
+  public number_account!: string;
+  public type!: 'corrente' | 'poupanca';
+  public balance!: number;
   public created_at!: Date;
   public updated_at!: Date;
 }
 
-TestAccount.init(
+BankAccount.init(
   {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
-    name: {
+    number_account: {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
-    age: {
+    type: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+            isIn: [['corrente', 'poupanca']],
+        },
+    },
+    balance:{
         type: DataTypes.INTEGER,
         allowNull: false,
     },
@@ -31,13 +39,14 @@ TestAccount.init(
     updated_at: {
         type: DataTypes.DATE,
         allowNull: true,
+        defaultValue: new Date()
     }
   },
   {
     sequelize: sequelize.original,
-    modelName: 'TestAccount',
-    tableName: 'test_account',
+    modelName: 'BankAccount',
+    tableName: 'bank_account',
   }
 );
 
-export default TestAccount;
+export default BankAccount;

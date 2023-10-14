@@ -4,9 +4,6 @@ import { LoggerUtil } from '../../utils/logger.util';
 const healthRoute = Router();
 
 export class HealthRoute {
-  constructor() {
-
-  }
   
   public async init() {
     LoggerUtil.logInfo('Starting HealthRoute', 'routes/health/health.route.ts');

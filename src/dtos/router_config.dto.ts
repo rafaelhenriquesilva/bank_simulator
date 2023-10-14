@@ -1,6 +1,6 @@
-export class RouterConfigDto {
+export class RouterConfigDto<T> {
     routes: any;
-    constructor(newRoute: any, methodName: string, urlRoute: string, routes: any) {
+    constructor(newRoute: T, methodName: string, urlRoute: string, routes: any) {
         this.routes = routes;
         this.init(newRoute, methodName, urlRoute);
     }

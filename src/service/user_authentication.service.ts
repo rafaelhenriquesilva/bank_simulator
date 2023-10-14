@@ -63,8 +63,12 @@ export class UserAuthenticationService {
                     token: token
                 } as UserAuthentication;
 
+                let whereCondition = {
+                    id: user[0].id
+                } as UserAuthentication;
+
                 //Update token user
-                await UserAuthenticationHelper.updateData(UserAuthentication, { id: user[0].id }, dataToUpdate) as UserAuthentication;
+                await UserAuthenticationHelper.updateData(UserAuthentication, whereCondition, dataToUpdate) as any;
                 LoggerUtil.logInfo(`Finishing login: ${JSON.stringify(user)}`, 'service/user_authentication.service.ts');
                 response.status(200).json({
                     message: 'Login realizado com sucesso!',
@@ -101,7 +105,7 @@ export class UserAuthenticationService {
 
             let whereCondition = {
                 id: user[0].id
-            } as any;
+            } as UserAuthentication;
 
             let updatedUser = await UserAuthenticationHelper.updateData(UserAuthentication, whereCondition, dataToUpdate) as UserAuthentication;
             LoggerUtil.logInfo(`Finishing updatePassword: ${JSON.stringify(updatedUser)}`, 'service/user_authentication.service.ts');
