@@ -4,7 +4,6 @@
   "description": "",
   "main": "dist/server.js",
   "scripts": {
-    "prestart": "NODE_ENV=production sequelize db:migrate",
     "start": "npx tsc && node dist/server.js",
     "predev": "NODE_ENV=development sequelize db:migrate",
     "dev": "NODE_ENV=development ts-node-dev --respawn --transpile-only --ignore-watch node_modules src/server.ts",
