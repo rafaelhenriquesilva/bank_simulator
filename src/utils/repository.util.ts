@@ -99,11 +99,11 @@ export class RepositoryUtil<T extends Model> {
         }
     }
 
-    async deleteAllRecords(isReplica?: boolean) {
+    async deleteAllRecords(whereCondition?: any, isReplica?: boolean) {
         try {
             const connection = await this.getConnection(isReplica);
             const deletedRecords = await connection.models[this.model.name].destroy({
-                where: {},
+                where: whereCondition,
                 truncate: false
             });
             return { message: `All records deleted.` };

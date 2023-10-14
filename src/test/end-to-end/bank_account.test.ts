@@ -1,6 +1,5 @@
 import supertest from 'supertest';
 import { App } from '../../app';
-import BankAccount from '../../entities/BankAccount';
 import { GlobalRepository } from '../../repositories/global.repository';
 import { loginUser } from './helpers/login.helper';
 import UserAuthentication from '../../entities/UserAuthentication';
@@ -82,8 +81,6 @@ describe('Bank Account action', () => {
         })
             .set('Content-Type', 'application/json')
             .set('Authorization', `Bearer ${token}`);
-
-        console.info(`bank account updated: ${JSON.stringify(response.body)}`);
 
         expect(response.status).toBe(200);
         expect(response.body[0]).toHaveProperty('number_account');

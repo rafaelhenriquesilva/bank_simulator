@@ -11,14 +11,14 @@ export class GlobalRepository<T extends Model> {
         this.repositoryUtil = new RepositoryUtil<T>(model);
     }
 
-    async getDataByParameters(whereCondition: any, isReplica?: boolean ): Promise<T[]> {
+    async getDataByParameters(whereCondition: T, isReplica?: boolean ): Promise<T[]> {
         LoggerUtil.logInfo(`Starting getDataByParameters, whereCondition: ${
             JSON.stringify(whereCondition)
         }`, 'repositories/global.repository.ts');
         return ErrorUtil.handleErrorsIfContains(this.repositoryUtil.getRecordsByParameters(whereCondition)) as Promise<T[]>;
     }
 
-    async updateData(data: any, whereCondition: any, isReplica?: boolean ): Promise<T> {
+    async updateData(data: any, whereCondition: T, isReplica?: boolean ): Promise<T> {
         data.updated_at = new Date();
         LoggerUtil.logInfo(`Starting updateData, data: ${
             JSON.stringify(data)
@@ -26,7 +26,7 @@ export class GlobalRepository<T extends Model> {
         return ErrorUtil.handleErrorsIfContains(this.repositoryUtil.updateRecord(data, whereCondition, isReplica)) as Promise<T>;
     }
 
-    async createData(data: any, isReplica?: boolean ): Promise<T> {
+    async createData(data: T, isReplica?: boolean ): Promise<T> {
         LoggerUtil.logInfo(`Starting createData, data: ${
             JSON.stringify(data)
         }`, 'repositories/global.repository.ts');
@@ -40,9 +40,10 @@ export class GlobalRepository<T extends Model> {
         return ErrorUtil.handleErrorsIfContains(this.repositoryUtil.deleteRecord(id, isReplica)) as Promise<{ message: string }>;
     }
 
-    async deleteAllData(isReplica?: boolean ): Promise<{ message: string }> {
+    async deleteAllData(whereCondition?: any, isReplica?: boolean ): Promise<{ message: string }> {
         LoggerUtil.logInfo(`Starting deleteAllData`, 'repositories/global.repository.ts');
-        return ErrorUtil.handleErrorsIfContains(this.repositoryUtil.deleteAllRecords(isReplica)) as Promise<{ message: string }>;
+        if(!whereCondition) whereCondition = {};
+        return ErrorUtil.handleErrorsIfContains(this.repositoryUtil.deleteAllRecords(whereCondition, isReplica)) as Promise<{ message: string }>;
     }
 
     async executeQuery(query: string, typeQuery: QueryTypes,isReplica?: boolean ): Promise<any> {

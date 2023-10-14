@@ -7,6 +7,7 @@ import { verifyTokenMiddleware } from '../../middlewares/auth.middleware';
 const transactionRoute = Router();
 
 export class TransactionRoute {
+    
     init(){
         LoggerUtil.logInfo('Starting TransactionRoute', 'routes/transaction/transaction.route.ts');
         transactionRoute.post('/withdraw', verifyTokenMiddleware, TransactionValidator.createTransactionValidator(), this.withdraw);

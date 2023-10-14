@@ -105,7 +105,7 @@ export class UserAuthenticationService {
 
             let whereCondition = {
                 id: user[0].id
-            } as any;
+            } as UserAuthentication;
 
             let updatedUser = await UserAuthenticationHelper.updateData(UserAuthentication, whereCondition, dataToUpdate) as UserAuthentication;
             LoggerUtil.logInfo(`Finishing updatePassword: ${JSON.stringify(updatedUser)}`, 'service/user_authentication.service.ts');

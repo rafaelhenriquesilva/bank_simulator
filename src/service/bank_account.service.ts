@@ -4,6 +4,7 @@ import BankAccount from "../entities/BankAccount";
 import { LoggerUtil } from "../utils/logger.util";
 import { ResponseUtil } from "../utils/response.util";
 import BankAccountHelper from "../helpers/bank_account.helper";
+import Transaction from "../entities/Transaction";
 
 export class BankAccountService {
     globalRepository = new GlobalRepository(BankAccount);
@@ -21,7 +22,7 @@ export class BankAccountService {
             let callback = async () => {
                 let data = await BankAccountHelper.createDataBankAccount(body.number_account, body.type, body.balance, 'create');
     
-                let newBankAccount = await this.globalRepository.createData(data);
+                let newBankAccount = await this.globalRepository.createData(data as BankAccount) ;
                 LoggerUtil.logInfo(`Finishing createBankAccount: ${JSON.stringify(newBankAccount)}`, 'service/bank_account.service.ts');
                 response.status(200).json(newBankAccount);
             };
@@ -51,7 +52,7 @@ export class BankAccountService {
         LoggerUtil.logInfo(`Starting getAllBankAccounts`, 'service/bank_account.service.ts');
 
         let callback = async () => {
-            let bankAccounts = await this.globalRepository.getDataByParameters({});
+            let bankAccounts = await this.globalRepository.getDataByParameters({} as BankAccount);
             LoggerUtil.logInfo(`Finishing getAllBankAccounts: ${JSON.stringify(bankAccounts)}`, 'service/bank_account.service.ts');
             response.status(200).json(bankAccounts);
         };
@@ -73,7 +74,7 @@ export class BankAccountService {
             let callback = async () => {
                 let data = await BankAccountHelper.createDataBankAccount('', body.type, body.balance, 'update'); 
                 
-                let updateBankAccount = await this.globalRepository.updateData(data, { number_account: number_account });
+                let updateBankAccount = await this.globalRepository.updateData(data, { number_account: number_account } as BankAccount);
                 LoggerUtil.logInfo(`Finishing updateBankAccount: ${JSON.stringify(updateBankAccount)}`, 'service/bank_account.service.ts');
                 response.status(200).json(updateBankAccount);
             };
@@ -93,6 +94,12 @@ export class BankAccountService {
         LoggerUtil.logInfo(`Starting deleteBankAccount: ${number_account}`, 'service/bank_account.service.ts');
 
         let callback = async () => {
+                let globalRepositoryTransaction = new GlobalRepository(Transaction); 
+                let whereNumberAccountOrigin = {  number_account_origin : number_account } as any;
+                let whereNumberAccountDestiny = {  number_account_destiny : number_account } as any;
+                await globalRepositoryTransaction.deleteAllData(whereNumberAccountOrigin);
+                await globalRepositoryTransaction.deleteAllData(whereNumberAccountDestiny);   
+
                 await this.globalRepository.deleteData(bank_account[0].id);
                 LoggerUtil.logInfo(`Finishing deleteBankAccount: ${number_account}`, 'service/bank_account.service.ts');
                 response.status(200).json({ message: 'Bank account deleted' });

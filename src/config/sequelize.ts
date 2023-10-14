@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 import { LoggerUtil } from '../utils/logger.util';
 
 dotenv.config({
-  path: process.env.NODE_ENV === 'production' ? '.env': '.env.test'
+  path: process.env.NODE_ENV === 'production' ? '.env': process.env.NODE_ENV === 'development' ? '.env.dev' : '.env.test'
 });
 // Defina uma interface para as configurações do banco de dados
 interface DatabaseConfig extends Options {
@@ -16,19 +16,19 @@ interface DatabaseConfig extends Options {
 
 let databaseConfig: DatabaseConfig = new Object() as DatabaseConfig;
 
-LoggerUtil.logInfo(`Iniciando o banco de dados no ambiente: ${process.env.NODE_ENV}`, 'config/sequelize.ts');
+let environment = process.env.NODE_ENV || 'development';
+
+
 
 let dialect = process.env.DB_DIALECT as 'mysql' | 'sqlite' | 'postgres' | 'mssql' || 'mysql';
 
 console.log(` environment: ${process.env.NODE_ENV}`);
-if(process.env.NODE_ENV === 'production') {
   databaseConfig = {
     username: process.env.DB_USERNAME || 'seu_username',
     password: process.env.DB_PASSWORD || 'sua_senha',
     database: process.env.DB_DATABASE || 'sua_base_de_dados',
     host: process.env.DB_HOST || 'localhost',
     dialect: dialect, 
-    storage: './__base__/database.sqlite',
     define: {
       timestamps: true,
       createdAt: 'created_at',
@@ -36,22 +36,10 @@ if(process.env.NODE_ENV === 'production') {
     },
     logging: false
   };
-}else {
-  databaseConfig = {
-    username: process.env.DB_USERNAME || 'seu_username',
-    password: process.env.DB_PASSWORD || 'sua_senha',
-    database: process.env.DB_DATABASE || 'sua_base_de_dados',
-    host: process.env.DB_HOST || 'localhost',
-    dialect: dialect, 
-    storage: './__base__/database.sqlite',
-    define: {
-      timestamps: true,
-      createdAt: 'created_at',
-      updatedAt: 'updated_at',
-    },
-    logging: false
-  };
-}
+
+  if(dialect === 'sqlite') {
+    databaseConfig.storage = './__base__/database.sqlite';
+  }
 
 const sequelize = new Sequelize(databaseConfig as DatabaseConfig);
 

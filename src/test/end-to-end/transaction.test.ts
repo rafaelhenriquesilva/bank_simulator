@@ -21,6 +21,7 @@ let token = '';
 describe('Transactions', () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        
     });
 
     it('Create user', async () => {

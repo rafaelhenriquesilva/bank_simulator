@@ -165,31 +165,7 @@
                 }
             }
         },
-        "/transaction/all": {
-            "get": {
-                "summary": "Listar todas as transações",
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Transaction"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/bank-account/update/{number_account}": {
+       "/bank-account/update/{number_account}": {
             "put": {
                 "summary": "Atualizar saldo da conta bancária",
                 "security": [
@@ -266,6 +242,51 @@
                 }
             }
         },
+        "/bank-account/delete/{number_account}": {
+            "delete": {
+                "summary": "Deletar uma conta bancária",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "number_account",
+                        "required": true,
+                        "description": "Número da conta bancária",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            }
+        },
+        "/transaction/all": {
+            "get": {
+                "summary": "Listar todas as transações",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Transaction"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/transaction/withdraw": {
             "post": {
                 "summary": "Sacar da conta bancária",
@@ -317,6 +338,46 @@
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/Transfer"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transaction/type/{type}": {
+            "get": {
+                "summary": "Listar todas as transações de um tipo específico",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "type",
+                        "required": true,
+                        "description": "Tipo da transação",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "deposito",
+                                "saque",
+                                "transferencia"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Transaction"
+                                    }
+                                }
                             }
                         }
                     }
@@ -439,33 +500,33 @@
             "Transaction": {
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "integer",
-                        "description": "Id da transação"
-                    },
-                    "number_account_origin": {
+                    "transactionAccountOrigin": {
                         "type": "string",
                         "description": "Número da conta bancária de origem"
                     },
-                    "number_account_destiny": {
+                    "accountOriginType": {
+                        "type": "string",
+                        "description": "Tipo da conta bancária de origem"
+                    },
+                    "transactionAccountDestiny": {
                         "type": "string",
                         "description": "Número da conta bancária de destino"
                     },
-                    "value": {
+                    "accountDestinyType": {
+                        "type": "string",
+                        "description": "Tipo da conta bancária de destino"
+                    },
+                    "transactionValue": {
                         "type": "string",
                         "description": "Valor da transação"
                     },
-                    "type": {
+                    "transactionType": {
                         "type": "string",
                         "description": "Tipo da transação"
                     },
                     "created_at": {
                         "type": "string",
                         "description": "Data de criação da transação"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "description": "Data de atualização da transação"
                     }
                 }
             },

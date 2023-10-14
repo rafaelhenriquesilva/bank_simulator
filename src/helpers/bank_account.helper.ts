@@ -59,7 +59,7 @@ export default class BankAccountHelper {
                 updated_at: new Date()
             }
 
-            await globalRepository.updateData(dataToUpdate, { number_account: numberAccount });
+            await globalRepository.updateData(dataToUpdate, { number_account: numberAccount } as BankAccount);
             return newBalance;
         } catch (error) {
             LoggerUtil.logError(`Error in updateBalance: ${error}`, 'service/transaction.service.ts', 'updateBalance');
