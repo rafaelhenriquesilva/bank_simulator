@@ -38,7 +38,7 @@ O projeto é configurado para permitir diferentes ambientes, onde o ambiente de 
 
 ## Documentação da API
 
-Este projeto utiliza o Swagger para documentação da API. Você pode acessar a documentação da API em [URL_DO_SWAGGER](https://userauth23-fbe378948f7c.herokuapp.com/api-docs/).
+Este projeto utiliza o Swagger para documentação da API. Você pode acessar a documentação da API em [URL_DO_SWAGGER](https://banksimulator23-a31f2fa31c93.herokuapp.com/api-docs/).
 
 Para acessar a documentação da API em ambiente local, execute o projeto e acesse a URL [http://localhost:3001/api-docs](http://localhost:3001/api-docs).
 
