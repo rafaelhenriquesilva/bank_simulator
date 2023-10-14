@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { LoggerUtil } from './logger.util';
 
-const TWO_HOUR_IN_MILLISECONDS = 7200000; // 2 hours
+const TWO_HOUR_IN_MILLISECONDS = process.env.TIME_MILLISECONDS || 3600000; // 1 hour in milliseconds = 3600000
 const SECRET_KEY_JWT = process.env.SECRET_KEY_JWT || 'JWT_TEST_TOKEN';
 
 export class JwtUtil {
@@ -26,8 +26,6 @@ export class JwtUtil {
     return new Promise((resolve, reject) => {
       jwt.verify(token, SECRET_KEY_JWT, (err) => {
         if (err) {
-          LoggerUtil.logError(`Error in verifyJwtToken: ${JSON.stringify(err)}`, 'utils/jwt.util.ts', 'verifyJwtToken');
-          
           reject({
             status: 401,
             message: 'Invalid token',
