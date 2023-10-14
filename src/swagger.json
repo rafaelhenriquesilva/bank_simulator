@@ -479,7 +479,7 @@
                         "description": "Tipo da conta bancária"
                     },
                     "balance": {
-                        "type": "string",
+                        "type": "integer",
                         "description": "Saldo da conta bancária"
                     },
                     "created_at": {
@@ -538,7 +538,7 @@
                         "description": "Número da conta bancária"
                     },
                     "value": {
-                        "type": "string",
+                        "type": "integer",
                         "description": "Valor da transação"
                     }
                 },
@@ -559,7 +559,7 @@
                         "description": "Número da conta bancária de destino"
                     },
                     "value": {
-                        "type": "string",
+                        "type": "integer",
                         "description": "Valor da transação"
                     }
                 },
