@@ -13,6 +13,7 @@ export class TransactionRoute {
         transactionRoute.post('/deposit', verifyTokenMiddleware, TransactionValidator.createTransactionValidator(), this.deposit);
         transactionRoute.get('/all', verifyTokenMiddleware, this.getAll);
         transactionRoute.post('/transfer', verifyTokenMiddleware, TransactionValidator.createTransferValidator(), this.transfer);
+        transactionRoute.get('/type/:type', verifyTokenMiddleware, TransactionValidator.getTransactionByTypeValidator(), this.getTransactionsByType);
     }
 
     public async withdraw(req: Request, res: Response) {
@@ -37,6 +38,12 @@ export class TransactionRoute {
         LoggerUtil.logInfo('Starting transfer', 'routes/transaction/transaction.route.ts');
         const transactionService = new TransactionService();
         await transactionService.transfer(req, res);
+    }
+
+    public async getTransactionsByType(req: Request, res: Response) {
+        LoggerUtil.logInfo('Starting getTransactionsByType', 'routes/transaction/transaction.route.ts');
+        const transactionService = new TransactionService();
+        await transactionService.getTransactionsByType(req, res);
     }
 
     getRoute() {

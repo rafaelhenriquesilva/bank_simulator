@@ -27,5 +27,16 @@ export class TransactionValidator {
         ]);
     }
 
+    static getTransactionByTypeValidator() {
+        // Verificar se o type não está vazio e se é um dos tipos válidos: saque, deposito, transferencia
+        let typeNotEmpty = param('type').notEmpty().withMessage('Type cannot be empty');
+        let typeValid = param('type').isIn(['saque', 'deposito', 'transferencia']).withMessage('Type must be one of the following: saque, deposito, transferencia');
+
+        return ValidatorUtil.validateFields([
+            typeNotEmpty,
+            typeValid
+        ]);
+    }
+
     
 }

@@ -99,6 +99,18 @@ describe('Transactions', () => {
 
     }, timeout);
 
+    it('Withdraw and not found bank account', async () => {
+        const withdraw = await request.post('/transaction/withdraw').send({
+            number_account_origin: 2222222222,
+            value: 500
+        }).set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(withdraw.status).toBe(404);
+        expect(withdraw.body).toHaveProperty('message');
+        expect(withdraw.body.message).toBe('Bank account not found');
+    }, timeout);
+
     it('Inssuficient balance', async () => {
         let value = 600
         const withdraw = await request.post('/transaction/withdraw').send({
@@ -129,6 +141,18 @@ describe('Transactions', () => {
         expect(lstBankAccount.body[0]).toHaveProperty('balance');
         expect(parseFloat(lstBankAccount.body[0].balance)).toBe(1000);
 
+    }, timeout);
+
+    it('deposit and not found bank account', async () => {
+        const deposit = await request.post('/transaction/deposit').send({
+            number_account_origin: 2222222222,
+            value: 500
+        }).set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(deposit.status).toBe(404);
+        expect(deposit.body).toHaveProperty('message');
+        expect(deposit.body.message).toBe('Bank account not found');
     }, timeout);
 
     it('Transfer 500 of account origin to account destination', async () => {
@@ -167,6 +191,17 @@ describe('Transactions', () => {
         expect(response.body).toHaveProperty('transactions');
         expect(response.body.transactions).toBeInstanceOf(Array);
         expect(response.body.transactions.length).toBe(3);
+    }, timeout);
+
+    it('Get transactions by type transferencia', async () => {
+        const response = await request.get('/transaction/type/transferencia')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('transactions');
+        expect(response.body.transactions).toBeInstanceOf(Array);
+        expect(response.body.transactions.length).toBe(1);
     }, timeout);
 
     it('Delete a bank account origin', async () => {
